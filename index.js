@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 const CLIENT_ID = process.env.OSU_CLIENT_ID;
 const CLIENT_SECRET = process.env.OSU_CLIENT_SECRET;
