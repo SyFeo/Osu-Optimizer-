@@ -200,15 +200,7 @@ async function analyze(){
 
 function renderPhase(p,i){
   const c=C[i];
-  return \`<div class="pcard" style="border:1px solid \${c}44;box-shadow:0 0 30px \${c}22">
-    <div class="pheader"><div><div class="phtitle" style="color:\${c}">\${p.title}</div><div class="phmeta">\${p.duration} · \${p.starRange}</div></div>
-    <div class="ppbadge" style="background:\${c}22;border:1px solid \${c}44;color:\${c}">\${p.expectedPP}</div></div>
-    <div class="focusline"><span style="color:\${c}">Focus:</span> \${p.focus}</div>
-    <div class="sublabel">MAP TYPES</div>
-    <div class="tags">\${p.mapTypes.map(t=>\`<span class="tag" style="background:\${c}15;border:1px solid \${c}33;color:\${c}">\${t}</span>\`).join("")}</div>
-    <div class="sublabel">TIPS</div>
-    \${p.tips.map(t=>\`<div class="tip"><span style="color:\${c};font-size:11px">›</span><span class="tiptext">\${t}</span></div>\`).join("")}
-  </div>\`;
+  return '<div class="pcard" style="border:1px solid '+c+'44;box-shadow:0 0 30px '+c+'22"><div class="pheader"><div><div class="phtitle" style="color:'+c+'">'+p.title+'</div><div class="phmeta">'+p.duration+' · '+p.starRange+'</div></div><div class="ppbadge" style="background:'+c+'22;border:1px solid '+c+'44;color:'+c+'">'+p.expectedPP+'</div></div><div class="focusline"><span style="color:'+c+'">Focus:</span> '+p.focus+'</div><div class="sublabel">MAP TYPES</div><div class="tags">'+p.mapTypes.map(t=>'<span class="tag" style="background:'+c+'15;border:1px solid '+c+'33;color:'+c+'">'+t+'</span>').join('')+'</div><div class="sublabel">TIPS</div>'+p.tips.map(t=>'<div class="tip"><span style="color:'+c+';font-size:11px">›</span><span class="tiptext">'+t+'</span></div>').join('')+'</div>';
 }
 
 function switchPhase(i){
@@ -224,35 +216,7 @@ function togglePlays(){
 
 function render(user,p,r){
   const s=user.statistics;
-  document.getElementById("results").innerHTML=\`
-  <div class="card">
-    \${user.avatar_url?\`<img class="avatar" src="\${user.avatar_url}">\`:""}
-    <div class="player-info">
-      <div><span class="player-name">\${user.username}</span><span class="badge">\${r.playstyle}</span></div>
-      <div class="pstats">#\${s?.global_rank?.toLocaleString()} global · \${s?.pp?.toFixed(0)}pp · \${s?.hit_accuracy?.toFixed(2)}% acc</div>
-      <div class="psummary">\${r.summary}</div>
-    </div>
-    <div class="targets">
-      <div class="tbox" style="background:rgba(204,68,255,0.1);border:1px solid rgba(204,68,255,0.3)"><div class="tlabel" style="color:#cc44ff">PP TARGET</div><div class="tvalue" style="color:#cc44ff">\${r.ppTarget?.toLocaleString()}</div></div>
-      <div class="tbox" style="background:rgba(102,170,255,0.1);border:1px solid rgba(102,170,255,0.3)"><div class="tlabel" style="color:#66aaff">RANK TARGET</div><div class="tvalue" style="color:#66aaff">#\${r.rankTarget?.toLocaleString()}</div></div>
-    </div>
-  </div>
-  <div class="grid-2">
-    <div class="panel" style="background:rgba(107,203,119,0.05);border:1px solid rgba(107,203,119,0.2)"><div class="ptitle" style="color:#6bcb77">Strengths</div>\${r.strengths.map(s=>\`<div class="pitem"><div class="pititle" style="color:#6bcb77">\${s.area}</div><div class="pidetail">\${s.detail}</div></div>\`).join("")}</div>
-    <div class="panel" style="background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.2)"><div class="ptitle" style="color:#ff6b6b">Weaknesses</div>\${r.weaknesses.map(w=>\`<div class="pitem"><div class="pititle" style="color:#ff6b6b">\${w.area}</div><div class="pidetail">\${w.detail}</div></div>\`).join("")}</div>
-  </div>
-  <div style="margin-bottom:24px">
-    <div class="slabel">— Grind Roadmap</div>
-    <div class="ptabs">\${r.roadmap.map((p,i)=>\`<button class="ptab\${phase===i?" a"+i:""}" onclick="switchPhase(\${i})">\${p.phase}</button>\`).join("")}</div>
-    <div id="pc">\${renderPhase(r.roadmap[phase],phase)}</div>
-  </div>
-  <div class="grid-3">
-    <div class="panel" style="background:rgba(102,170,255,0.05);border:1px solid rgba(102,170,255,0.15)"><div class="ptitle" style="color:#66aaff">Mod Tips</div>\${r.modSuggestions.map(m=>\`<div class="li"><span style="color:#66aaff;font-size:11px">◆</span><span class="litext">\${m}</span></div>\`).join("")}</div>
-    <div class="panel" style="background:rgba(255,217,61,0.05);border:1px solid rgba(255,217,61,0.15)"><div class="ptitle" style="color:#ffd93d">Daily Routine</div>\${r.dailyRoutine.map((item,i)=>\`<div class="li"><span style="color:#ffd93d;font-size:11px">\${i+1}.</span><span class="litext">\${item}</span></div>\`).join("")}</div>
-    <div class="panel" style="background:rgba(107,203,119,0.05);border:1px solid rgba(107,203,119,0.15)"><div class="ptitle" style="color:#6bcb77">Map Recs</div>\${r.mapRecommendations.map(m=>\`<div class="li"><span style="color:#6bcb77;font-size:11px">▸</span><span class="litext">\${m}</span></div>\`).join("")}</div>
-  </div>
-  <button class="ptoggle" onclick="togglePlays()"><span>Top Plays (\${p.length})</span><span id="pa">▼</span></button>
-  <div id="pl" class="plist hidden">\${p.slice(0,15).map((p,i)=>\`<div class="prow"><span style="color:#4a4460;font-size:11px;min-width:20px">#\${i+1}</span><span style="color:#9988bb;font-size:11px;flex:1;min-width:120px">\${p.beatmapset?.title}</span><span style="color:#ff66aa;font-size:11px;font-weight:700">\${Math.round(p.pp)}pp</span><span style="color:#6b6880;font-size:11px">\${p.beatmap?.difficulty_rating}★</span><span style="color:#6b6880;font-size:11px">\${(p.accuracy*100).toFixed(2)}%</span>\${p.mods.length>0?\`<span style="color:#ffd93d;font-size:10px">\${p.mods.join(",")}</span>\`:""}</div>\`).join("")}</div>\`;
+  document.getElementById("results").innerHTML='<div class="card">'+(user.avatar_url?'<img class="avatar" src="'+user.avatar_url+'">':"")+'<div class="player-info"><div><span class="player-name">'+user.username+'</span><span class="badge">'+r.playstyle+'</span></div><div class="pstats">#'+s?.global_rank?.toLocaleString()+' global · '+s?.pp?.toFixed(0)+'pp · '+s?.hit_accuracy?.toFixed(2)+'% acc</div><div class="psummary">'+r.summary+'</div></div><div class="targets"><div class="tbox" style="background:rgba(204,68,255,0.1);border:1px solid rgba(204,68,255,0.3)"><div class="tlabel" style="color:#cc44ff">PP TARGET</div><div class="tvalue" style="color:#cc44ff">'+r.ppTarget?.toLocaleString()+'</div></div><div class="tbox" style="background:rgba(102,170,255,0.1);border:1px solid rgba(102,170,255,0.3)"><div class="tlabel" style="color:#66aaff">RANK TARGET</div><div class="tvalue" style="color:#66aaff">#'+r.rankTarget?.toLocaleString()+'</div></div></div></div><div class="grid-2"><div class="panel" style="background:rgba(107,203,119,0.05);border:1px solid rgba(107,203,119,0.2)"><div class="ptitle" style="color:#6bcb77">Strengths</div>'+r.strengths.map(s=>'<div class="pitem"><div class="pititle" style="color:#6bcb77">'+s.area+'</div><div class="pidetail">'+s.detail+'</div></div>').join('')+'</div><div class="panel" style="background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.2)"><div class="ptitle" style="color:#ff6b6b">Weaknesses</div>'+r.weaknesses.map(w=>'<div class="pitem"><div class="pititle" style="color:#ff6b6b">'+w.area+'</div><div class="pidetail">'+w.detail+'</div></div>').join('')+'</div></div><div style="margin-bottom:24px"><div class="slabel">— Grind Roadmap</div><div class="ptabs">'+r.roadmap.map((p,i)=>'<button class="ptab'+(phase===i?" a"+i:"")+'" onclick="switchPhase('+i+')">'+p.phase+'</button>').join('')+'</div><div id="pc">'+renderPhase(r.roadmap[phase],phase)+'</div></div><div class="grid-3"><div class="panel" style="background:rgba(102,170,255,0.05);border:1px solid rgba(102,170,255,0.15)"><div class="ptitle" style="color:#66aaff">Mod Tips</div>'+r.modSuggestions.map(m=>'<div class="li"><span style="color:#66aaff;font-size:11px">◆</span><span class="litext">'+m+'</span></div>').join('')+'</div><div class="panel" style="background:rgba(255,217,61,0.05);border:1px solid rgba(255,217,61,0.15)"><div class="ptitle" style="color:#ffd93d">Daily Routine</div>'+r.dailyRoutine.map((item,i)=>'<div class="li"><span style="color:#ffd93d;font-size:11px">'+(i+1)+'.</span><span class="litext">'+item+'</span></div>').join('')+'</div><div class="panel" style="background:rgba(107,203,119,0.05);border:1px solid rgba(107,203,119,0.15)"><div class="ptitle" style="color:#6bcb77">Map Recs</div>'+r.mapRecommendations.map(m=>'<div class="li"><span style="color:#6bcb77;font-size:11px">▸</span><span class="litext">'+m+'</span></div>').join('')+'</div></div><button class="ptoggle" onclick="togglePlays()"><span>Top Plays ('+p.length+')</span><span id="pa">▼</span></button><div id="pl" class="plist hidden">'+p.slice(0,15).map((p,i)=>'<div class="prow"><span style="color:#4a4460;font-size:11px;min-width:20px">#'+(i+1)+'</span><span style="color:#9988bb;font-size:11px;flex:1;min-width:120px">'+p.beatmapset?.title+'</span><span style="color:#ff66aa;font-size:11px;font-weight:700">'+Math.round(p.pp)+'pp</span><span style="color:#6b6880;font-size:11px">'+p.beatmap?.difficulty_rating+'★</span><span style="color:#6b6880;font-size:11px">'+(p.accuracy*100).toFixed(2)+'%</span>'+(p.mods.length>0?'<span style="color:#ffd93d;font-size:10px">'+p.mods.join(",")+'</span>':'')+'</div>').join('')+'</div>';
   document.getElementById("results").classList.remove("hidden");
 }
 document.getElementById("u").addEventListener("keydown",e=>{if(e.key==="Enter")analyze();});
